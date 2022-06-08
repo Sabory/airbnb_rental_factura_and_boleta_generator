@@ -38,9 +38,19 @@ class FacturaVenta(Document):
 @dataclass
 class FacturaCompra(Document):
     @classmethod
-    def generate_document(cls, amount: str, rut: str, street: str, comuna: str,
-                        city: str, giro: str, detalle: str, 
-                        book_name: str, interactive: bool = True):
+    def generate_document(cls, 
+                        amount: int, 
+                        book_to_name: str, 
+                        rut: str = p.FACTURA_COMPRA_TO['RUT'], 
+                        street: str = p.FACTURA_COMPRA_TO['street'], 
+                        comuna: str = p.FACTURA_COMPRA_TO['comuna'],
+                        city: str = p.FACTURA_COMPRA_TO['city'],
+                        giro: str = p.FACTURA_COMPRA_TO['giro'], 
+                        detalle: str = p.FACTURA_COMPRA_TO['detalle'],
+                        interactive: bool = True
+                        ):
+        assert amount > 0 and isinstance(amount, int), "Amount must be a integer and greater than 0"
+
         def login_in(driver):
             SII.login_to_sii(driver, usr=os.getenv('SII_PANCHO_USR'), 
                             psw=os.getenv('SII_PANCHO_PSW'))
@@ -142,7 +152,7 @@ class FacturaCompra(Document):
             console.log("Everything is ok!", style='green bold')
 
 
-        driver = web.start_webdriver()
+        driver = web.start_webdriver(headless=True)
         driver.get(p.FACTURA_COMPRA_LOGIN_URL)
         login_in(driver)
         choose_society(driver) # Choose company
@@ -152,11 +162,12 @@ class FacturaCompra(Document):
         # wait until form fill is loaded
         e = '//*[@id="VIEW_EFXP"]/fieldset[1]/table[1]/tbody/tr/td[2]/table/tbody/tr[1]/td/table/tbody/tr/td/table/tbody/tr[1]/td/strong'
         web.wait_action_for_element(driver, search_for=e, search_by=By.XPATH, delay=10)
+        
         # Check if Company RUT is correct
         loadedRUT = driver.find_element(By.XPATH, e)
         if loadedRUT.text != f"Rut {os.getenv('CERRO_EL_PLOMO_RUT').replace('.', '')}":
             raise ValueError("[FACTURA COMPRA] RUT loaded is not the same as the one used to login")
-        console.log("[FACTURA COMPRA] RUT loaded is the same as the one used to login", style='green')
+        console.log("[FACTURA COMPRA] SUCCESS - RUT loaded is the same as the one used to login", style='green')
         console.log("Filling Factura...")
         fill_factura_details(driver)
 
@@ -186,9 +197,13 @@ class FacturaCompra(Document):
         web.wait_action_for_element(driver, search_for=e, search_by=By.XPATH, delay=10, action=EC.element_to_be_clickable)
         go_to_document = driver.find_element(By.XPATH, e)
         go_to_documentURL = go_to_document.get_attribute('href')
-        filePATH = f"{p.FACTURA_DWN_PATH}/factura_compra_{book_name.replace(' ', '_')}.pdf"
-        Utils.download_file_from_URL(go_to_documentURL, filePATH)
-        console.log("[FACTURA COMPRA] Factura downloaded to:", filePATH, style='green')
-        Discord.send_message(f"Factura compra para reserva de {book_name} descargada correctamente a {filePATH}")
-        web.ask_confirmation("[FACTURA COMPRA] Do you want to close the browser?", interactive, dont_exit=True)
         
+        
+        filePATH = f"{p.FACTURA_DWN_PATH}/factura_compra_{book_to_name.replace(' ', '_')}.pdf"
+        #Utils.download_file_from_URL(go_to_documentURL, filePATH)
+        console.log("[FACTURA COMPRA] Factura downloaded to:", filePATH, style='green')
+        Discord.send_message(f"Nueva factura de compra creada a nombre de {book_to_name} ({go_to_documentURL}).\
+                \n Nombre archivo: factura_compra_{book_to_name.replace(' ', '_')}.pdf")
+        #Discord.send_message(f"Factura compra para reserva de {book_to_name} descargada correctamente a {filePATH}")
+        #web.ask_confirmation("[FACTURA COMPRA] Do you want to close the browser?", interactive, dont_exit=True)
+        driver.quit()

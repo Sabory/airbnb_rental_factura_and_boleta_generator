@@ -8,4 +8,9 @@ If:
    - When direct booking needs a factura, then a `factura venta` is needed instead of a `boleta`. 
    - This flow does not support Airbnb with factura. 
 
-## THIS IS STILL IN DEVELOPMENT.
+**Database classes not created yet**
+
+## Instalation
+
+
+

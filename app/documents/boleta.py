@@ -18,7 +18,7 @@ from selenium.common.exceptions import ElementClickInterceptedException
 from console import console
 import properties as p
 import webdriver as web
-from sii import SII 
+import sii as s
 from discord import Discord
 from general_utils import Utils
 from documents.abstract import Document
@@ -32,29 +32,6 @@ class BoletaVenta(Document):
     def generate_document(cls, amount: int, with_taxes: bool, 
                         stayed_nights: int, total_payment_amount: int, 
                         file_name: str, interactive: bool):
-        
-        def login_to_sii_boletas(driver):
-            console.log(f"Loging to {p.boletasURL}")
-            driver.get(p.boletasURL)
-            web.wait_action_for_element(driver, search_for="input-14", search_by=By.ID)
-            usr_input = driver.find_element(By.ID, "input-14")
-            usr_input.clear()
-            usr_input.send_keys(os.getenv('SII_PANCHO_USR'))
-            psw_input = driver.find_element(By.ID, "input-15")
-            psw_input.clear()
-            psw_input.send_keys(os.getenv('SII_PANCHO_PSW'))
-            login_btn = driver.find_element(By.XPATH, '//*[@id="app"]/div/div/div/v-template/div[1]/div[1]/div/div[2]/div/form/div/div[4]/button')
-            console.log("Logging in...")
-            login_btn.click()
-            time.sleep(0.5)
-            price_console_screen = '//*[@id="app"]/div[1]/div/main/div/div[2]/div/div/div[1]/div/div/span'
-            web.wait_action_for_element(driver, 
-                                        search_for=price_console_screen, 
-                                        search_by=By.XPATH, 
-                                        delay=10, 
-                                        action=EC.presence_of_element_located)
-            console.log("Logged in successful", style="green")
-            time.sleep(0.5)
 
         def select_elegible_society(driver, society_rut):
             console.log("Selecting elegible society...")
@@ -198,7 +175,7 @@ class BoletaVenta(Document):
 
         console.log(f"Generating Boleta for amount {amount}. Affected by taxes: {with_taxes}")
         driver = web.start_webdriver()
-        login_to_sii_boletas(driver)
+        s.SII.login_to_s.SII_boletas(driver)
         select_elegible_society(driver, society_rut=os.getenv('CERRO_EL_PLOMO_RUT'))
         input_amount(driver, amount=amount)
         # Send input amount

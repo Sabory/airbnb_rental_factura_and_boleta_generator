@@ -1,40 +1,28 @@
 from console import console
-import properties as p
-import webdriver as web
-from sii import SII 
-from discord import Discord
-from general_utils import Utils
 
-from rich.markdown import Markdown
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver import ActionChains
-from selenium.webdriver.common.alert import Alert
-from selenium.common.exceptions import ElementClickInterceptedException
-
-from typing import List, Dict
-from abc import ABC, abstractmethod
-import os
-from dataclasses import dataclass, field
-from datetime import datetime
-import time
 import pytz
 chileanTZ = pytz.timezone('America/Santiago')
-import random
+from bookings.airbnb_booking import AirbnbBooking
+from house import House
+from sii import BookingSIIManager
 
 def main():
+    casona = House(name="Casona", price_per_night=300000, cleaning_fee=80000)
+
     booking = {
-        "check_in": "12-11-2021", # B
-        "check_out": "14-11-2021", # C
-        "name": "Franco Schiappacasse", # E
-        "email": "fschiappacassem@gmail.com", # F
-        "total_payment_amount": 636438,  # T -> Total amount recieved
+        "house" : casona,
+        "check_in": "01-02-2022", # B
+        "check_out": "05-02-2022", # C
+        "name": "Constanza Javiera Silva", # E
+        "email": "conysilvagg@gmail.com", # F
+        "total_payment_amount": 1200000,  # T -> Total amount recieved
+        "deposit_amount_from_airbnb": 1200000,
+        "need_factura": False
     }
-# Booking(check_in="12-11-2021", check_out="14-11-2021", 
-#   name="Franco Schiappacasse", email="fschiappacassem@gmail.com", 
-#   total_payment_amount=636438
-#   )
+    airbnb = AirbnbBooking(**booking)
+    
+    BookingSIIManager(airbnb)
+
 
 
 if __name__ == '__main__':
