@@ -23,7 +23,7 @@ from .abstract import Document
 
 @dataclass
 class FacturaCompra(Document):
-    headless: bool = False
+    headless: bool = config["sii"]["factura"]["headless"].get(bool)
 
     @classmethod
     def generate_document(

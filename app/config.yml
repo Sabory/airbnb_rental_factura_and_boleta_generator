@@ -9,6 +9,7 @@ sii:
   boleta:
     login_URL: "https://eboleta.sii.cl/"
     download_PATH:  "./data/boletas"
+    headless: false
 
   IVA_calculator: 
     URL: "https://www4.sii.cl/ivaext/"
@@ -17,6 +18,7 @@ sii:
     compra:
       login_URL: "https://zeusr.sii.cl/AUT2000/InicioAutenticacion/IngresoRutClave.html?https://www1.sii.cl/cgi-bin/Portal001/mipeSelEmpresa.cgi?DESDE_DONDE_URL=OPCION%3D46%26TIPO%3D4"
       download_PATH: "./data/facturas"
+      headless: false
   
   company:
     rut: null
@@ -59,6 +61,12 @@ google:
     boletas:
       id:  "1k-XLszzEesUmgeU88zC8ApGM3zlWnDO9Z6Zq0JxQ-q8"
       main_worksheet: "boletas casona"
+      cells_map: 
+        boleta_exenta: "T"
+        boleta_exenta_url: "U"
+        boleta_afecta: "W"
+        boleta_afecta_url: "X"
+  
   drive:
     default_parent_folder_id: "1iifsPPF1p9oSHbU3XBweuYV02ROU2xEj"
 

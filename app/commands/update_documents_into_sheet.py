@@ -1,13 +1,19 @@
 from .abstract import Command
 from core.google import Sheets
+from config import config
+
+
+def _get_config_col(cell_address):
+    return config["google"]["sheets"]["boletas"]["cells_map"][cell_address].get(str)
 
 
 class UpdateDocumentIntoDocumentsSheet(Command):
+
     COL_MAP = {
-        "boleta_exenta": "T",
-        "boleta_exenta_url": "U",
-        "boleta_afecta": "X",
-        "boleta_afecta_url": "Y",
+        "boleta_exenta": _get_config_col("boleta_exenta"),
+        "boleta_exenta_url": _get_config_col("boleta_exenta_url"),
+        "boleta_afecta": _get_config_col("boleta_afecta"),
+        "boleta_afecta_url": _get_config_col("boleta_afecta_url"),
     }
 
     @classmethod

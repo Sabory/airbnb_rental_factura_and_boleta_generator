@@ -39,8 +39,10 @@ def main():
 
         # TODO: Send email
 
-        # TODO: if Airbnb create factura
-        # booking_sii_manager.generate_factura()
+        # TODO: Check that this works
+        if booking.need_factura:
+            console.log("Generando factura")
+            booking_sii_manager.generate_factura()
 
 
 def generate_boleta(sii_manager: BookingSIIManager, boleta_type: str):
