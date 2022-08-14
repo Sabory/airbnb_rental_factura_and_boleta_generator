@@ -1,0 +1,69 @@
+
+scrapper:
+  webdriverPath: "/Applications/chromedriver"
+
+
+sii:
+  IVA: 0.19
+
+  boleta:
+    login_URL: "https://eboleta.sii.cl/"
+    download_PATH:  "./data/boletas"
+
+  IVA_calculator: 
+    URL: "https://www4.sii.cl/ivaext/"
+
+  factura:
+    compra:
+      login_URL: "https://zeusr.sii.cl/AUT2000/InicioAutenticacion/IngresoRutClave.html?https://www1.sii.cl/cgi-bin/Portal001/mipeSelEmpresa.cgi?DESDE_DONDE_URL=OPCION%3D46%26TIPO%3D4"
+      download_PATH: "./data/facturas"
+  
+  company:
+    rut: null
+
+    sii_account:
+      user: null
+      password: null
+      rol: null
+
+    legal_represntative: 
+      sii_account: 
+        user: null
+        password: null
+        digital_certificate: null
+
+
+airbnb:
+  service_fee: 0.03
+  factura:
+    RUT: "55.555.555-5"
+    street: "South Lotts Road"
+    comuna: "Ringsend"
+    city: "Dublin"
+    giro: "Servicios pagina web hospedaje"
+    details: "Factura por servicio de Airbnb"
+
+  
+
+
+properties:
+  casona:
+    name: "casona"
+    price_per_night: 300_000
+    cleaning_fee: 80_000
+
+
+google:
+  credentials_path: "./core/google/google_credentials.json"
+  sheets:
+    boletas:
+      id:  "1k-XLszzEesUmgeU88zC8ApGM3zlWnDO9Z6Zq0JxQ-q8"
+      main_worksheet: "boletas casona"
+  drive:
+    default_parent_folder_id: "1iifsPPF1p9oSHbU3XBweuYV02ROU2xEj"
+
+
+slack:
+  channels:
+    casona: null
+    boletas: null
