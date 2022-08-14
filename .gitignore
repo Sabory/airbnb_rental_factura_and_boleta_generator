@@ -5,3 +5,7 @@ __pycache__
 factura_compra.txt
 gcloud_gsheets.json
 venv
+google_credentials.json
+.ipynb_checkpoints
+.idea
+.vscode
