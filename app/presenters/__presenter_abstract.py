@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 
 
-class Presenter(ABC):
+class PresenterAbstract(ABC):
+    presenter = {}
+
     @classmethod
     @abstractmethod
     def get(cls):

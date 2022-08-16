@@ -42,6 +42,10 @@ class Booking(ABC):
         return False
 
     @property
+    def client_email(self):
+        return self.client.email
+
+    @property
     def stayed_nights(self):
         return (self.check_out - self.check_in).days
 

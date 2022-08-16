@@ -1,13 +1,12 @@
-from presenters import Presenter
+from presenters import PresenterAbstract
 from commands.get_pending_documents import GetPendingDocuments
 from models.client import Client
 from models.house import CASONA
-from models.bookings.controller import Controller
 
 import pandas as pd
 
 
-class PendingDocumentsPresenter(Presenter):
+class PendingDocumentsPresenter(PresenterAbstract):
     @classmethod
     def get(cls) -> list:
         pendings = cls.__bookings()
@@ -35,7 +34,7 @@ class PendingDocumentsPresenter(Presenter):
                 "pool": int(raw_booking["extra_pool"]),
                 "others": int(raw_booking["extra_others"]),
             },
-            "files_statuses": {
+            "files_status": {
                 "boleta_exenta": int(raw_booking["boleta_exenta_generated"]),
                 "boleta_afecta": int(raw_booking["boleta_afecta_generated"]),
                 "factura": raw_booking["factura_generated"],

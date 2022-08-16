@@ -3,9 +3,6 @@ from dataclasses import dataclass, field
 import time
 from retry import retry
 
-
-from rich.markdown import Markdown
-
 # SELENIUM IMPORTS
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By

@@ -44,9 +44,7 @@ airbnb:
     city: "Dublin"
     giro: "Servicios pagina web hospedaje"
     details: "Factura por servicio de Airbnb"
-
   
-
 
 properties:
   casona:
@@ -62,10 +60,13 @@ google:
       id:  "1k-XLszzEesUmgeU88zC8ApGM3zlWnDO9Z6Zq0JxQ-q8"
       main_worksheet: "boletas casona"
       cells_map: 
-        boleta_exenta: "T"
-        boleta_exenta_url: "U"
-        boleta_afecta: "W"
-        boleta_afecta_url: "X"
+        boleta_exenta: "U"
+        boleta_exenta_url: "V"
+        boleta_afecta: "X"
+        boleta_afecta_url: "Y"
+        factura: "AA"
+        factura_url: "AB"
+        sii_calculated_iva_amount: "AE"
   
   drive:
     default_parent_folder_id: "1iifsPPF1p9oSHbU3XBweuYV02ROU2xEj"
@@ -75,3 +76,10 @@ slack:
   channels:
     casona: null
     boletas: null
+
+
+mailer:
+  email: null
+  password: null
+  smtp_server: ['smtp.gmail.com', 587]
+  default_bcc: [null]

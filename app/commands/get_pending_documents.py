@@ -32,7 +32,11 @@ class GetPendingDocuments(Command):
 
     def _get_pending_documents(df):
         return df.loc[
-            (~df["Boletas generadas"].isin(["100%", "not needed yet"]))
+            (
+                (df["Boletas boleta_afecta_generated"] != 1)
+                | (df["Boletas boleta_excenta_generated"] != 1)
+                | (df["factura_generated"] != 1)
+            )
             & (df["Reserva efectiva"] == 1)
             & (df["Nombre cliente"] != "")
         ]

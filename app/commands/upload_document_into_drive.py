@@ -1,9 +1,7 @@
 from datetime import datetime, date
-from distutils.command import check
 import locale
 
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
-
 from commands.abstract import Command
 from core.google import Drive
 from models.servicio_impuesto_interno.sii_dte.abstract import Document
