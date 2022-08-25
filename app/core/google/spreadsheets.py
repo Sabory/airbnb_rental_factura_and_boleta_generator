@@ -25,7 +25,7 @@ class Sheets:
     @classmethod
     def get_credentials(cls):
         return Credentials.from_service_account_file(
-            config["google"]["cretentials_path"].get(str), scopes=cls.SCOPES
+            config["google"]["credentials_path"].get(str), scopes=cls.SCOPES
         )
 
     def find_row_matching_string(self, find_by: str, worksheet=None):

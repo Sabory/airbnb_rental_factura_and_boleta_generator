@@ -13,6 +13,6 @@ class MailerAbstract(ABC):
         Mailer.send_email(
             email_to=presenter["email_to"],
             subject=presenter["subject"],
-            content=presenter.get["content"],
-            attachments=presenter.get("attachments", None),
+            content=presenter["content"],
+            attachments=presenter["attachments"],
         )

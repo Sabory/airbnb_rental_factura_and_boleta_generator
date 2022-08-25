@@ -12,7 +12,7 @@ class PendingDocumentsPresenter(PresenterAbstract):
         pendings = cls.__bookings()
 
         pendings_bookings = []
-        for i, row in pendings.iterrows():
+        for _, row in pendings.iterrows():
             pendings_bookings.append(cls.__parse_booking(row))
         return pendings_bookings
 

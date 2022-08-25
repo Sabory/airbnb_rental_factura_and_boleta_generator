@@ -1,4 +1,4 @@
-from .abstract import Command
+from . import CommandAbstract
 from core.google import Sheets
 from config import config
 
@@ -7,7 +7,7 @@ def _get_cols_map(cell_address):
     return config["google"]["sheets"]["boletas"]["cells_map"][cell_address].get(str)
 
 
-class UpdateSiiCalulatedIvaAmountIntoSheet(Command):
+class UpdateSiiCalulatedIvaAmountIntoSheet(CommandAbstract):
     SHEET_COL = _get_cols_map("sii_calculated_iva_amount")
 
     @classmethod

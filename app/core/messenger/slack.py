@@ -1,16 +1,14 @@
 from .abstract import Messenger
-import os
-from dotenv import load_dotenv
+
+from config import config
 import requests
 from retry import retry
-
-load_dotenv()
 
 
 class Slack(Messenger):
     CHANNELS = {
-        "casona": os.getenv("SLACK_WEBHOOK_CASONA"),
-        "boletas": os.getenv("SLACK_WEBHOOK_URL_BOLETAS_GEN"),
+        "casona": config["slack"]["channels"]["casona"],
+        "boletas": config["slack"]["channels"]["boletas"],
     }
 
     @classmethod

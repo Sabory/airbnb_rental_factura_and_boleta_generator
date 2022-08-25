@@ -1,4 +1,3 @@
-import email
 from core.console import console
 
 from models.bookings.controller import Controller
@@ -13,14 +12,11 @@ from commands.update_sii_calculated_iva_amount_in_sheet import (
 )
 from commands.upload_document_into_drive import UploadDocumentIntoDrive
 
-import click
 
-
-@click.command()
 def main():
     pending_bookings = PendingDocumentsPresenter.get()
     for booking_dict in pending_bookings:
-        print(booking_dict)
+        console.log(booking_dict)
 
         files_status = booking_dict.pop("files_status")
 
@@ -31,41 +27,43 @@ def main():
             booking.sheet_row, booking_sii_manager.iva_calculated_by_sii
         )
 
-        if need_to_generate_boleta_with_taxes(files_status):
+        if need_to_generate_document_with_taxes(files_status):
             console.log("Generando boleta afecta")
-            generate_boleta(booking_sii_manager, "boleta_afecta")
+            generate_document(booking_sii_manager, "boleta_afecta")
 
-        if need_to_generate_boleta_without_taxes(files_status):
+        if need_to_generate_document_without_taxes(files_status):
             console.log("Generando boleta exenta")
-            generate_boleta(booking_sii_manager, "boleta_exenta")
+            generate_document(booking_sii_manager, "boleta_exenta")
 
         # TODO: WIP -> Send email
-        if booking_sii_manager.has_selling_documents & booking.client.email:
-            boletas_paths = [b.path for b in booking_sii_manager.selling_documents]
+        if should_notify_user(booking_sii_manager):
+            console.log("Sending email")
             send_boletas_to_client_mail(
-                email_to=booking.client.mail, files_paths=boletas_paths
+                email_to=booking.client.mail,
+                files_paths=booking_sii_manager.selling_documents_paths,
             )
 
         # TODO: WIP -> Generate factura
         if booking.need_factura & need_to_generate_factura(files_status):
             console.log("Generando factura")
-            booking_sii_manager.generate_factura()
+            generate_document(booking_sii_manager, "factura")
 
 
-def generate_boleta(sii_manager: BookingSIIManager, boleta_type: str):
-    boleta_generators = {
-        "boleta_afecta": sii_manager.generate_boleta_with_taxes,
-        "boleta_exenta": sii_manager.generate_boleta_without_taxes,
+def generate_document(sii_manager: BookingSIIManager, boleta_type: str):
+    BOLETA_GENERATORS = {
+        "boleta_afecta": sii_manager.generate_document_with_taxes,
+        "boleta_exenta": sii_manager.generate_document_without_taxes,
+        "factura": sii_manager.generate_factura,
     }
 
-    boleta_generator = boleta_generators[boleta_type]
-    boleta = boleta_generator()
+    boleta_generator = BOLETA_GENERATORS[boleta_type]
+    document = boleta_generator()
 
-    update_documents_into_sheet(sii_manager.booking.sheet_row, boleta_type, boleta.id)
+    update_documents_into_sheet(sii_manager.booking.sheet_row, boleta_type, document.id)
 
-    webview_URL = upload_documents_into_drive(sii_manager.booking, boleta)
+    webview_URL = upload_documents_into_drive(sii_manager.booking, document)
 
-    update_docuemnt_webview_into_sheet(
+    update_document_webview_into_sheet(
         sii_manager.booking.sheet_row, boleta_type, webview_URL
     )
 
@@ -73,7 +71,7 @@ def generate_boleta(sii_manager: BookingSIIManager, boleta_type: str):
 def upload_documents_into_drive(booking, document) -> str:
     file_webview_URL = UploadDocumentIntoDrive.perform(
         client_name=booking.client.name,
-        check_in_date=booking.check_in_date.date(),
+        check_in_date=booking.check_in.date(),
         file_path=document.path,
         file_name=document.path.split("/")[-1],
     )
@@ -84,16 +82,16 @@ def update_sii_calculated_iva_amount(sheet_row, calculated_amount):
     UpdateSiiCalulatedIvaAmountIntoSheet.perform(sheet_row, calculated_amount)
 
 
-def need_to_generate_boleta_with_taxes(files_statuses):
+def need_to_generate_document_with_taxes(files_statuses):
     return files_statuses["boleta_afecta"] == 0
 
 
-def need_to_generate_boleta_without_taxes(files_statuses):
+def need_to_generate_document_without_taxes(files_statuses):
     return files_statuses["boleta_exenta"] == 0
 
 
 def need_to_generate_factura(files_statuses):
-    return files_statuses["factura"].isin([0, "0"])
+    return files_statuses["factura"] in [0, "0"]
 
 
 def update_documents_into_sheet(
@@ -105,13 +103,20 @@ def update_documents_into_sheet(
     UpdateDocumentIntoDocumentsSheet.perform(sheet_row_tu_update, **keys_to_update)
 
 
-def update_docuemnt_webview_into_sheet(
+def update_document_webview_into_sheet(
     sheet_row_tu_update: int, document_type: str, document_webview_URL: str
 ):
     keys_to_update = {
         f"{document_type}_url": document_webview_URL,
     }
     UpdateDocumentIntoDocumentsSheet.perform(sheet_row_tu_update, **keys_to_update)
+
+
+def should_notify_user(booking_sii_manager):
+    return (
+        booking_sii_manager.has_selling_documents
+        & booking_sii_manager.booking.client.has_email
+    )
 
 
 def send_boletas_to_client_mail(email_to: str, files_paths: list) -> None:

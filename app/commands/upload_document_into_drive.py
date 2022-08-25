@@ -2,12 +2,12 @@ from datetime import datetime, date
 import locale
 
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
-from commands.abstract import Command
+from . import CommandAbstract
 from core.google import Drive
 from models.servicio_impuesto_interno.sii_dte.abstract import Document
 
 
-class UploadIntoDrive(Command):
+class UploadDocumentIntoDrive(CommandAbstract):
     @classmethod
     def perform(
         cls, client_name: str, check_in_date: date, file_path: str, file_name: str

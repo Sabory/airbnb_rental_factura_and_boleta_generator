@@ -26,9 +26,9 @@ sii:
     sii_account:
       user: null
       password: null
-      rol: null
+      rol: "004"
 
-    legal_represntative: 
+    legal_representative: 
       sii_account: 
         user: null
         password: null

@@ -1,5 +1,5 @@
 from tasks import RemindPendingDocuments
 
 
-if __name__ == "__main__":
+def remind_about_pending_documents():
     RemindPendingDocuments.perform()

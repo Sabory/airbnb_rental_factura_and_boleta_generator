@@ -1,10 +1,9 @@
-from app import presenters
 from presenters import PresenterAbstract
 
 
 class GeneratedBoletasPresenter(PresenterAbstract):
     @classmethod
-    def get(cls, email_to, boletas_paths) -> dict:
+    def get(cls, email_to, boletas_paths: list[str] = None) -> dict:
         cls.presenter["email_to"] = email_to
         cls.presenter["subject"] = cls._subject()
         cls.presenter["content"] = cls._content()
@@ -17,13 +16,13 @@ class GeneratedBoletasPresenter(PresenterAbstract):
 
     def _content():
         content = """
-            Hola!
+Hola!
 
-            Esperarmos que lo hayan pasado increible en su estadía en la Casona de San Francisco 😊.
+Esperarmos que lo hayan pasado increible en su estadía en la Casona de San Francisco 😊.
 
-            Adjunto se encuentran las boletas de su estadía.
+Adjunto se encuentran las boletas de su estadía.
 
-            Saludos!
+Saludos!
         """
 
         return content

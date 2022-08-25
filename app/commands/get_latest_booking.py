@@ -1,9 +1,9 @@
-from .abstract import Command
+from . import CommandAbstract
 from commands.get_bookings import GetBookings
 from pandas import Series
 
 
-class GetLatestBooking(Command):
+class GetLatestBooking(CommandAbstract):
     @classmethod
     def perform(cls) -> Series:
         df = GetBookings.perform()

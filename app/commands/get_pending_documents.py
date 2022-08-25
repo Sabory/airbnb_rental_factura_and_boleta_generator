@@ -1,9 +1,9 @@
-from .abstract import Command
+from . import CommandAbstract
 from commands.get_bookings import GetBookings
 import pandas as pd
 
 
-class GetPendingDocuments(Command):
+class GetPendingDocuments(CommandAbstract):
     COLS = [
         "sheet_row",
         "booking_type",
@@ -33,9 +33,9 @@ class GetPendingDocuments(Command):
     def _get_pending_documents(df):
         return df.loc[
             (
-                (df["Boletas boleta_afecta_generated"] != 1)
-                | (df["Boletas boleta_excenta_generated"] != 1)
-                | (df["factura_generated"] != 1)
+                (df["boleta_afecta_generated"].isin([0, "0"]))
+                | (df["boleta_exenta_generated"].isin([0, "0"]))
+                | (df["factura_generated"].isin([0, "0"]))
             )
             & (df["Reserva efectiva"] == 1)
             & (df["Nombre cliente"] != "")

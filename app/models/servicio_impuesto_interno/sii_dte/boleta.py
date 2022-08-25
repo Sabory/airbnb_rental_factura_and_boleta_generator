@@ -400,7 +400,9 @@ class BoletaVenta(Document):
             driver, navigator, amount, with_taxes, stayed_nights, total_payment_amount
         ):
             select_elegible_society(
-                driver, navigator, society_rut=os.getenv("CERRO_EL_PLOMO_RUT")
+                driver,
+                navigator,
+                society_rut=config["sii"]["company"]["rut"].get(str),
             )
             input_amount(driver, navigator, amount)
 

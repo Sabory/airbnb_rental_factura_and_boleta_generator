@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-import retry
+from retry import retry
 
 
-class Command:
+class CommandAbstract:
     @classmethod
     @retry(tries=2, delay=10, backoff=2)
     @abstractmethod

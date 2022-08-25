@@ -1,4 +1,3 @@
-from msilib.schema import Condition
 import os
 import time
 
@@ -17,7 +16,8 @@ SII_NAVIGATOR = {"version": '//*[@id="app"]/div/div/div/v-template/div[2]/div'}
 
 
 class SII:
-    boletas_url = config["sii"]["boleta"]["login_URL"].get()
+    BOLETAS_URL = config["sii"]["boleta"]["login_URL"].get()
+    LEGAL_REPRESENTATIVE = config["sii"]["company"]["legal_representative"]
 
     @classmethod
     def login_to_sii(
@@ -56,8 +56,8 @@ class SII:
                 .replace(" ", "")
             )
 
-        console.log(f"Loging to {cls.boletas_url}")
-        driver.get(cls.boletas_url)
+        console.log(f"Loging to {cls.BOLETAS_URL}")
+        driver.get(cls.BOLETAS_URL)
 
         web.wait_action_for_element(driver, search_for="input-14", search_by=By.ID)
 
@@ -65,10 +65,12 @@ class SII:
 
         usr_input = driver.find_element(By.ID, "input-14")
         usr_input.clear()
-        usr_input.send_keys(os.getenv("SII_PANCHO_USR"))
+        usr_input.send_keys(cls.LEGAL_REPRESENTATIVE["sii_account"]["user"].get(str))
         psw_input = driver.find_element(By.ID, "input-15")
         psw_input.clear()
-        psw_input.send_keys(os.getenv("SII_PANCHO_PSW"))
+        psw_input.send_keys(
+            cls.LEGAL_REPRESENTATIVE["sii_account"]["password"].get(str)
+        )
         login_btn = driver.find_element(
             By.XPATH,
             '//*[@id="app"]/div/div/div/v-template/div[1]/div[1]/div/div[2]/div/form/div/div[4]/button',
