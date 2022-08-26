@@ -1,45 +1,31 @@
 # SII manager for property bookings
-This code if for the purpose of managing the SII needed documents (factura & boleta) when rentaling a property.
-For now, a property rental can be done through Airbnb or Direct booking.
-Everytime a property is rented, a new `boleta` for the rental is needed.
 
-If:
-   - When booking was through Airbnb: also is needed a `factura compra` for the service provided by Airbnb.
-   - When direct booking needs a factura, then a `factura venta` is needed instead of a `boleta`. 
-   - This flow does not support Airbnb with factura. 
+This code if for the purpose of managing the SII needed documents (factura & boletas) when renting a property.
+For now, a property rental only can be performed by `Airbnb` or `Direct booking`.
 
-**Database classes not created yet**
+- When booking was through Airbnb: also is needed a `factura compra` for the service provided by Airbnb.
+- When direct booking needs a factura, then a `factura venta` is needed instead of a `boleta` -> PENDING
+
+> ⚠️ This flow does not support Airbnb with "factura" instead of "boletas" yet.
 
 ## Instalation
 
-
 ## Usage
-- First create `Booking` and `BookingSIIManager`:
-```python
-    booking = {
-        "house" : House(name="Casona", price_per_night=300000, cleaning_fee=80000),
-        "check_in": "29-03-2022",
-        "check_out": "01-04-2022",
-        "client": Client(name="Bastean Faundez", email="icorream213@gmail.com"),
-        "amount_received": 655724,
-        "detail_extra_charged": {
-            "pool": 0,
-            "others": 0,
-        },
-        "booking_type": "airbnb_booking",
-    }
 
+Just run the `./app/generate_pending_documents.py` script.
 
-    booking = Controller.create_booking(**booking)
+### Tasks
 
-    BookingSIIManager(booking)
-```
+- Check if there is a pending document to be generated. If so, notify:
 
-- Then, you can generate the SII documents:
-```python
-      BookingSIIManager.generate_boleta_with_taxes()
-      BookingSIIManager.generate_boleta_without_taxes()
-```
+    ```bash
+    python -m tasks -t <task_to_run>
+    ```
 
+---
 
+## Pending ToDo's
 
+- [ ] Add a `factura venta` when a clients wants to pay with a `factura` instead of a `boleta`.
+- [ ] Check if the SII taxes calculation is already calculated.
+- [ ] Make quick command for generating a specific document for custom needs.
