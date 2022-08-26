@@ -35,7 +35,6 @@ def main():
             console.log("Generando boleta exenta")
             generate_document(booking_sii_manager, "boleta_exenta")
 
-        # TODO: WIP -> Send email
         if should_notify_user(booking_sii_manager):
             console.log("Sending email")
             send_boletas_to_client_mail(
@@ -43,7 +42,6 @@ def main():
                 files_paths=booking_sii_manager.selling_documents_paths,
             )
 
-        # TODO: WIP -> Generate factura
         if booking.need_factura & need_to_generate_factura(files_status):
             console.log("Generando factura")
             generate_document(booking_sii_manager, "factura")
@@ -121,7 +119,7 @@ def should_notify_user(booking_sii_manager):
 
 def send_boletas_to_client_mail(email_to: str, files_paths: list) -> None:
     NotifyClientAboutBookingBoletas.perform(
-        email_to="icorream213@gmail.com", boletas_paths=files_paths
+        email_to=email_to, boletas_paths=files_paths
     )
 
 

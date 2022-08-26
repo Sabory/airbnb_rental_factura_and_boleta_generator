@@ -39,6 +39,7 @@ class RemindPendingDocuments:
         latest_booking = GetLatestBooking.perform()
         Slack.send_message(
             ":white_check_mark: *PENDIENTES*: No hay documentos pendientes de generar."
-            f"\n> Última reserva registrada: {latest_booking['Nombre cliente']} - {latest_booking['Fecha entrada']}"
+            f"\n> Última reserva registrada: {latest_booking['Nombre cliente']} - {latest_booking['Fecha entrada']}",
+            channel="casona",
         )
         return
