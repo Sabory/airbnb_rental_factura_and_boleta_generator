@@ -33,13 +33,18 @@ class UploadDocumentIntoDrive(CommandAbstract):
 
         month_folder_id = cls._get_month_folder(drive, check_in_date, year_folder_id)
 
+        folder_name = cls._generate_folder_name(client_name, check_in_date)
+
         booking_folder_id = cls._get_booking_folder(
             drive,
-            client_name,
-            check_in_date,
+            folder_name,
             month_folder_id,
         )
         return booking_folder_id
+
+    def _generate_folder_name(client_name: str, check_in_date: date) -> str:
+        folder_name_date_part = check_in_date.strftime("%d/%m (%b)")
+        return f"{folder_name_date_part}, {client_name}"
 
     def _get_check_in_date_from_document(document) -> date:
         return datetime.strftime(document.file_name.split("_")[1], "%d-%m-%Y").date()
@@ -61,11 +66,8 @@ class UploadDocumentIntoDrive(CommandAbstract):
         return folder_id
 
     def _get_booking_folder(
-        drive: Drive, client_name: str, check_in_date: date, month_folder_id: str
+        drive: Drive, folder_name: str, month_folder_id: str
     ) -> str:
-        folder_name_date_part = check_in_date.strftime("%d/%m (%b)")
-        folder_name = f"{folder_name_date_part}, {client_name}"
-
         folder_id = drive.get_or_create_folder(
             name=folder_name, parent_folder_id=month_folder_id
         )
