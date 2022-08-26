@@ -58,7 +58,7 @@ google:
   sheets:
     boletas:
       id:  "1k-XLszzEesUmgeU88zC8ApGM3zlWnDO9Z6Zq0JxQ-q8"
-      main_worksheet: "boletas casona"
+      main_worksheet: "documentos casona"
       cells_map: 
         boleta_exenta: "U"
         boleta_exenta_url: "V"
